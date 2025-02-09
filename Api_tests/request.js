@@ -58,7 +58,7 @@ const data = {
     timestamp: timestamp
 };
 
-console.log("Data with signature:", data);
+console.log(data)
 
 //option requests
 const requestOptions = {
@@ -69,9 +69,28 @@ const requestOptions = {
     body: JSON.stringify(data)
 }
 
+function POST_login(){
+    fetch(login_url, requestOptions)
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+    console.log("Login Response:", JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    console.error
 
-fetch_ER();
-fetch_MP();
-fetch_SP();
-console.log(Date.now())
+('Error:', error);
+  });
+
+}
+
+
+POST_login();
+
+
+//fetch_ER();
+//fetch_MP();
+//fetch_SP();
+//console.log(Date.now())
 

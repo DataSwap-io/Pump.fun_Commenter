@@ -34,24 +34,31 @@ function fetch_SP () {
     });
 }
 
-
-//datacollection_process
+//wallet_gen
 const nacl = require('tweetnacl');
-const privateKey = Uint8Array.from([...]);
-const walletAddress = "BL4NTkMsGB1pf2ju43qQDYhPtpKSSrFUaX4kU5ZoqPE";
+const { Keypair } = require('@solana/web3.js');
+const keypair = Keypair.generate();
+const privateKey = keypair.secretKey;
+const walletAddress = keypair.publicKey.toString();
+console.log("New Wallet Address:", walletAddress);
+console.log("New Private Key:", Buffer.from(privateKey).toString('hex')); 
+
+
+//POST data voorverwerking
 const timestamp = Date.now();
 const message = `Sign this message to authenticate: ${timestamp}`;
 const messageBytes = Buffer.from(message);
 const signature = nacl.sign.detached(messageBytes, privateKey);
+console.log("Signature:", Buffer.from(signature).toString('hex')); 
 
-
-//data input
+//POST-DATA
 const data = {
     address: walletAddress,
     signature: Buffer.from(signature).toString('hex'),
     timestamp: timestamp
-}
+};
 
+console.log("Data with signature:", data);
 
 //option requests
 const requestOptions = {
@@ -61,7 +68,6 @@ const requestOptions = {
     },
     body: JSON.stringify(data)
 }
-
 
 
 fetch_ER();

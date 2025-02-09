@@ -46,7 +46,9 @@ console.log("New Private Key:", Buffer.from(privateKey).toString('hex'));
 
 //POST data voorverwerking
 const timestamp = Date.now();
-const message = `Sign this message to authenticate: ${timestamp}`;
+const timestampString = Date.now().toString();
+const message = `Sign in to pump.fun: ${timestampString}`;
+console.log("Boodschap die wordt ondertekend:", message);
 const messageBytes = Buffer.from(message);
 const signature = nacl.sign.detached(messageBytes, privateKey);
 console.log("Signature:", Buffer.from(signature).toString('hex')); 

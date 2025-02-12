@@ -5,6 +5,16 @@ import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 
 const login_url = "https://frontend-api-v3.pump.fun/auth/login";
+let AUTH_TOKEN = null; // Added this declaration
+
+function extractAuthToken(cookieString) {
+    if (!cookieString) return null;
+    
+    const authTokenMatch = cookieString.match(/auth_token=([^;]+)/);
+    return authTokenMatch ? authTokenMatch[1] : null;
+}
+
+let authTokenPromise = null;
 
 function generateSingleWallet() {
     const keyPair = Keypair.generate();
@@ -14,7 +24,6 @@ function generateSingleWallet() {
         secretKey: keyPair.secretKey
     };
 }
-
 
 async function POST_login(wallet) {
     try {
@@ -27,16 +36,12 @@ async function POST_login(wallet) {
         const message = new TextEncoder().encode(`Sign in to pump.fun: ${timestamp}`);
         const signature = nacl.sign.detached(message, keypair.secretKey);
         const encodedSignature = bs58.encode(signature);
-        console.log(`You 're signing the message: ${encodedSignature}`)
+
         const loginData = {
             address: wallet.address,
             signature: encodedSignature,
             timestamp: timestamp
         };
-
-        console.log(chalk.yellow("\nAttempting login with wallet:"));
-        console.log(chalk.blue("Address:"), wallet.address);
-        console.log(chalk.blue("Timestamp:"), timestamp);
 
         const response = await fetch(login_url, {
             method: "POST",
@@ -53,17 +58,18 @@ async function POST_login(wallet) {
             },
             body: JSON.stringify(loginData)
         });
+        
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
         const cookies = response.headers.get('set-cookie');
-        console.log(chalk.green("Success! De volgende Received cookies:"), cookies);
-        return cookies;
+        AUTH_TOKEN = extractAuthToken(cookies);
+        return AUTH_TOKEN;
 
     } catch (error) {
-        console.error(chalk.red("Login errosr:"), error.message);
+        console.error(chalk.red("Login error:"), error.message);
         return null;
     }
 }
@@ -71,15 +77,23 @@ async function POST_login(wallet) {
 (async () => {
     try {
         const wallet = generateSingleWallet();
-        
-        console.log(chalk.green("\nGenerated Wallet:"));
-        console.log(chalk.blue("Address:"), wallet.address);
-        console.log(chalk.blue("Private Key (b58):"), wallet.privateKey);
-        console.log(chalk.blue("Secret Key (hex):"), Buffer.from(wallet.secretKey).toString('hex'));
-
-        await POST_login(wallet);
-
+        const authToken = await POST_login(wallet);
+        console.log(chalk.blue("Auth Token:"), authToken);
+        return authToken;
     } catch (error) {
         console.error(chalk.red("Fatal error:"), error);
+        return null;
     }
 })();
+
+export const getAuthToken = () => {
+    if (!authTokenPromise) {
+        authTokenPromise = new Promise(resolve => {
+            const checkToken = () => {
+                AUTH_TOKEN ? resolve(AUTH_TOKEN) : setTimeout(checkToken, 100);
+            };
+            checkToken();
+        });
+    }
+    return authTokenPromise;
+};

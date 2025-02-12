@@ -24,7 +24,7 @@ async function POST_login(wallet) {
         const decodedPrivateKey = bs58.decode(wallet.privateKey);
         const privateKey = decodedPrivateKey.slice(0, 32);
         const keypair = nacl.sign.keyPair.fromSeed(privateKey);
-        const message = new TextEncoder().encode(Sign in to pump.fun: ${timestamp});
+        const message = new TextEncoder().encode(`Sign in to pump.fun: ${timestamp}`);
         const signature = nacl.sign.detached(message, keypair.secretKey);
         const encodedSignature = bs58.encode(signature);
         console.log(`You 're signing the message: ${encodedSignature}`)
@@ -55,7 +55,7 @@ async function POST_login(wallet) {
         });
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(HTTP ${response.status}: ${errorText});
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
         const cookies = response.headers.get('set-cookie');

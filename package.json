@@ -2,7 +2,7 @@
   "name": "pump.fun_commenter",
   "version": "1.0.0",
   "description": "",
-  "main": "komtnog.js",
+  "main": "request.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -27,7 +27,7 @@ async function POST_login(wallet) {
         const message = new TextEncoder().encode(Sign in to pump.fun: ${timestamp});
         const signature = nacl.sign.detached(message, keypair.secretKey);
         const encodedSignature = bs58.encode(signature);
-        console.log(You 're signing the message: ${encodedSignature})
+        console.log(`You 're signing the message: ${encodedSignature}`)
         const loginData = {
             address: wallet.address,
             signature: encodedSignature,

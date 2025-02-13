@@ -22,8 +22,10 @@ function generateSingleWallet() {
         address: keyPair.publicKey.toString(),
         privateKey: bs58.encode(keyPair.secretKey),
         secretKey: keyPair.secretKey
+
     };
 }
+console.log(generateSingleWallet())
 
 async function POST_login(wallet) {
     try {
@@ -65,6 +67,7 @@ async function POST_login(wallet) {
         }
 
         const cookies = response.headers.get('set-cookie');
+        console.log(cookies)
         AUTH_TOKEN = extractAuthToken(cookies);
         return AUTH_TOKEN;
 

@@ -1,13 +1,12 @@
-import { getAuthToken } from './login.js';
+import { Auth_Comment } from './Create_Acc.js';
 
-
-const authToken = getAuthToken();
-console.log(authToken);
 
 const url = "https://frontend-api-v3.pump.fun/token/generateTokenForThread";
 
 async function generateToken() {
   try {
+    const authToken = await Auth_Comment;
+    console.log(authToken);
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -23,9 +22,15 @@ async function generateToken() {
 
     const data = await response.json();
     console.log("Token gegenereerd:", data.token);
+    return {
+      AuthToken: authToken,
+      CommentToken: data.token
+    };
   } catch (error) {
     console.error("Fout bij het genereren van de token:", error);
   }
 }
 
 generateToken();
+
+export const x_aws_proxy_token = generateToken();

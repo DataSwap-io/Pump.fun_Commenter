@@ -1,11 +1,16 @@
 import { x_aws_proxy_token } from "./Auth.js";
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function main() {
     try {
         const comment_url = "https://client-proxy-server.pump.fun/comment";
         const { AuthToken, CommentToken } = await x_aws_proxy_token;
         console.log("AuthToken:", AuthToken);
         console.log("Generated Token:", CommentToken);
+         await delay(3412);
 
         const response = await fetch(comment_url, {
             method: "POST",

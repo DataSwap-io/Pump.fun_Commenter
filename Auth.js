@@ -10,7 +10,7 @@ async function generateToken() {
   try {
     const authToken = await Auth_Comment;
     console.log(authToken);
-    await delay(2130);
+    await delay(3130);
     const response = await fetch(url, {
       method: "GET",
       headers: {

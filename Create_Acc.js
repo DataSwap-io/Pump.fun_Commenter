@@ -11,7 +11,7 @@ async function main() {
     try {
         const authToken = await getAuthToken();
         console.log(`De gegenereerde token is: ${authToken}`);
-        await delay(2000);
+        await delay(10000);
         const username = genUsername();
         const bio = genBio();
 

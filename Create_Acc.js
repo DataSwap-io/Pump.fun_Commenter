@@ -21,7 +21,7 @@ async function main() {
         const headers = {
             "Cookie": `auth_token=${authToken}`,
             "Content-Type": "application/json"
-        }
+        };
 
         const req = await fetch(url, {
             method: "POST",
@@ -36,6 +36,7 @@ async function main() {
         }
 
         console.log(chalk.greenBright(`Profile created \nUsername: ${res.username}\nBio: ${res.bio}`));
+        return authToken; // Retourneer de authToken
     } catch (error) {
         console.error(chalk.redBright("Error:", error));
     }
@@ -64,4 +65,5 @@ function genBio() {
     return bioList[randomChoice];
 }
 
-main();
+// Exporteer de main functie en de authToken
+export const Auth_Comment = main();

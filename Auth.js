@@ -1,7 +1,8 @@
 import { getAuthToken } from './login.js';
 
 
-const authToken = 
+const authToken = getAuthToken();
+console.log(authToken);
 
 const url = "https://frontend-api-v3.pump.fun/token/generateTokenForThread";
 

@@ -1,5 +1,8 @@
 import { Auth_Comment } from './Create_Acc.js';
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const url = "https://frontend-api-v3.pump.fun/token/generateTokenForThread";
 
@@ -7,6 +10,7 @@ async function generateToken() {
   try {
     const authToken = await Auth_Comment;
     console.log(authToken);
+    await delay(2130);
     const response = await fetch(url, {
       method: "GET",
       headers: {

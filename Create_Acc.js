@@ -3,11 +3,15 @@ import chalk from "chalk";
 import { faker } from '@faker-js/faker';
 import { getAuthToken } from './login.js';
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function main() {
     try {
         const authToken = await getAuthToken();
         console.log(`De gegenereerde token is: ${authToken}`);
-
+        await delay(2000);
         const username = genUsername();
         const bio = genBio();
 

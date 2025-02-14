@@ -1,10 +1,11 @@
-import { getAuthToken } from './login.js';
+import { x_aws_proxy_token } from "./Auth.js";
 
 async function main() {
     try {
         const comment_url = "https://client-proxy-server.pump.fun/comment";
-        const Authorization = await getAuthToken();
-        console.log(`The generated key is ${Authorization}`);
+        const { AuthToken, CommentToken } = await x_aws_proxy_token ;
+        console.log("AuthToken:", AuthToken);
+        console.log("Generated Token:", CommentToken);
 
         const response = await fetch(comment_url, {
             method: "POST",
@@ -14,8 +15,8 @@ async function main() {
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': Authorization,
-                'X-Aws-Proxy-Token': 'xxxx'
+                'Authorization': AuthToken,
+                'X-Aws-Proxy-Token': CommentToken
             }
         });
 

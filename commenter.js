@@ -3,7 +3,7 @@ import { x_aws_proxy_token } from "./Auth.js";
 async function main() {
     try {
         const comment_url = "https://client-proxy-server.pump.fun/comment";
-        const { AuthToken, CommentToken } = await x_aws_proxy_token ;
+        const { AuthToken, CommentToken } = await x_aws_proxy_token;
         console.log("AuthToken:", AuthToken);
         console.log("Generated Token:", CommentToken);
 
@@ -15,17 +15,20 @@ async function main() {
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': AuthToken,
-                'X-Aws-Proxy-Token': CommentToken
+                'Authorization': `Bearer ${AuthToken}`,
+                'X-Aws-Proxy-Token': CommentToken,
+                'Accept': 'application/json',
+                'Cookie': `auth_token=${AuthToken}` 
             }
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
         }
 
         const data = await response.json();
-        console.log(data);
+        console.log("Response data:", data);
     } catch (error) {
         console.error('Error:', error);
     }
